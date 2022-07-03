@@ -11,7 +11,7 @@ const createRequest = (url) => ({ url, headers: cryptoApiHeaders })
 
 export const cryptoApi = createApi({
   // highlight-start
-  reducerPath: "cryptoApi",
+  reducerPath: 'cryptoApi',
   // highlight-end
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
@@ -19,13 +19,24 @@ export const cryptoApi = createApi({
     getCryptos: builder.query({
       query: (count) => createRequest(`/coins?limit=${count}`),
     }),
+    getCryptoDetails: builder.query({
+      query: (coinId) => createRequest(`/coin/${coinId}`),
+    }),
+    getCryptoHistory: builder.query({
+      query: ({ coinId, timePeriod }) =>
+        createRequest(`coin/${coinId}/history?timePeriod=${timePeriod}`),
+    }),
   }),
 })
 
 //redux will basically create a hook. example: getCryptos endpoint
 //needs to be prefixed and suffixed with use and Query which will be
 //created as a hook and will enable calling of that endpoint
-export const { useGetCryptosQuery } = cryptoApi
+export const {
+  useGetCryptosQuery,
+  useGetCryptoDetailsQuery,
+  useGetCryptoHistoryQuery,
+} = cryptoApi
 
 // const options = {
 //     method: 'GET',
